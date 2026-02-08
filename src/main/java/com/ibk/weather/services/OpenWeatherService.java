@@ -1,14 +1,13 @@
 package com.ibk.weather.services;
 
-import com.ibk.weather.models.CurrentWeatherResponse;
-import com.ibk.weather.models.ForecastResponse;
+import com.ibk.weather.models.responses.ServicesResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 public interface OpenWeatherService {
 
-    Mono<ResponseEntity<CurrentWeatherResponse>> getCurrentWeather(String city);
-
-    Mono<ResponseEntity<ForecastResponse>> getForecast(String id);
+    Mono<ResponseEntity<ServicesResponse>> getCurrentWeather(
+        String city, ServerWebExchange exchange);
 
 }

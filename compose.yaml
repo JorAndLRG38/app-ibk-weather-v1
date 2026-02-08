@@ -10,3 +10,12 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - OPENWEATHER_API_KEY=524a1799445ad793e2b9e95c09eeb810
+  redis:
+    image: redis:7
+    container_name: redis-local
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
