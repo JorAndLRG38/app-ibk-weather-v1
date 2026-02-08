@@ -1,0 +1,12 @@
+services:
+  weather-service:
+    image: eclipse-temurin:17-jdk
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: weather-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - OPENWEATHER_API_KEY=524a1799445ad793e2b9e95c09eeb810

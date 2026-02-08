@@ -1,0 +1,16 @@
+# Imagen base con JDK 17 (puedes ajustar según tu versión de Java)
+ARG JAVA_IMAGE=eclipse-temurin:17-jdk
+
+FROM ${JAVA_IMAGE} AS runtime
+
+# Directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copiamos el JAR generado por Maven/Gradle
+COPY target/app-ibk-weather-v1.jar app.jar
+
+# Exponemos el puerto donde corre Spring Boot
+EXPOSE 8080
+
+# Comando de arranque
+ENTRYPOINT ["java", "-jar", "app.jar"]

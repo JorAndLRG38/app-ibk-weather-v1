@@ -1,0 +1,6 @@
+openweather:
+  base-url: https://api.openweathermap.org/data/2.5
+  api-key: 524a1799445ad793e2b9e95c09eeb810
+
+server:
+  port: 8080

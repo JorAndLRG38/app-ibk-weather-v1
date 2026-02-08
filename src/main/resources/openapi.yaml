@@ -1,0 +1,7 @@
+openapi: 3.0.3
+info:
+  title: "APP IBK Weather API"
+  description: "API de prueba para obtener el clima de una ciudad utilizando la API de OpenWeatherMap."
+  version: "1.0.0"
+paths: {}
+components: {}
