@@ -14,14 +14,16 @@ spec:
     spec:
       containers:
         - name: app-ibk-weather-v1
-          image: app-ibk-weather-v1:1.0.1
+          image: app-ibk-weather-v1:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
-            - name: SPRING_REDIS_HOST
+            - name: SPRING_DATA_REDIS_HOST
               value: redis
-            - name: SPRING_REDIS_PORT
+            - name: SPRING_DATA_REDIS_PORT
               value: "6379"
+            - name: SPRING_DATA_REDIS_PASSWORD
+              value: "123456789"
             - name: SPRING_PROFILES_ACTIVE
               value: k8s

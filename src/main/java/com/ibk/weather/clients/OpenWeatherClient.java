@@ -35,8 +35,7 @@ public class OpenWeatherClient {
    * @return Mono con la respuesta del clima actual.
    */
   public Mono<CurrentWeatherResponse> getCurrentWeather(String city) {
-    log.info("Datos no obtenidos de cache. Llamando a OpenWeather API "
-        + "para obtener el clima de la ciudad de {}", city);
+    log.info("Datos no obtenidos de cache. Llamando a OpenWeather API");
     return webClient.get()
         .uri(uriBuilder ->
             uriBuilder.path("/weather")

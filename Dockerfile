@@ -10,5 +10,7 @@ WORKDIR /app
 COPY target/app-ibk-weather-v1.jar app.jar
 # Exponemos el puerto donde corre Spring Boot
 EXPOSE 8080
+# Instalar redis-tools (incluye redis-cli)
+RUN apt-get update && apt-get install -y redis-tools && rm -rf /var/lib/apt/lists/*
 # Comando de arranque
 ENTRYPOINT ["java", "-jar", "app.jar"]

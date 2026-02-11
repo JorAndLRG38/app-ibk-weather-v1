@@ -41,15 +41,7 @@ public class RedisServiceImpl {
    */
   public void saveData(CurrentWeatherResponse response) {
     weatherOps.opsForValue()
-        .setIfAbsent(response.getName(), response, Duration.ofHours(1L))
-        .subscribe(success -> {
-          if (success) {
-            log.info("Datos guardados en cache con codigo {}.", response.getName());
-          } else {
-            log.info("Datos ya existen en cache para codigo {}. No se guardaron.", response.getName());
-          }
-        }, error ->
-            log.error("Error al guardar datos en cache para codigo {}: {}", response.getName(), error.getMessage()));
+        .setIfAbsent(response.getName(), response, Duration.ofHours(1L));
   }
 
   /**

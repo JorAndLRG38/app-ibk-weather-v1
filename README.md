@@ -117,7 +117,9 @@ If you have to configurate the kubernetes cluster, you can use the following com
 $ kubectl apply -f deployment.yaml
 $ kubectl apply -f service.yaml
 $ kubectl apply -f hpa.yaml
-$ docker run -d -p 8080:8080 --name app-ibk-weather-v1 app-ibk-weather-v1:1.0 
+$ kubectl apply -f redis-service.yaml
+$ kubectl apply -f redis-deployment.yaml
+$ docker run -d -p 8080:8080 --name app-ibk-weather-v1 app-ibk-weather-v1:1.0.0
 ```
 
 ** Edit the version and the name of the image as needed.
