@@ -8,14 +8,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+/**
+ * Implementación del servicio de salud del microservicio.
+ */
 @Service
 public class HealthServiceImpl implements HealthService {
 
-    @Override
-    public Mono<ResponseEntity<HealthDtoResponse>> checkHealth(ServerWebExchange exchange) {
-        exchange.getResponse().setStatusCode(HttpStatus.OK);
-        return Mono.just(
-            ResponseEntity.status(200).body(new HealthDtoResponse(
-                "200", "Funcionando correctamente")));
-    }
+  /**
+   * Verificar el estado del microservicio.
+   *
+   * @param exchange Contexto de la solicitud web.
+   * @return Mono con la respuesta de salud del microservicio.
+   */
+  @Override
+  public Mono<ResponseEntity<HealthDtoResponse>> checkHealth(ServerWebExchange exchange) {
+    exchange.getResponse().setStatusCode(HttpStatus.OK);
+    return Mono.just(
+      ResponseEntity.status(200).body(new HealthDtoResponse(
+          "200", "Funcionando correctamente")));
+  }
 }

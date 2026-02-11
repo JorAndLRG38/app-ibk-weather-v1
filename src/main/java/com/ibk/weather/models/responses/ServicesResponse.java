@@ -8,6 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * DTO de respuesta para el endpoint de servicios del microservicio.
+ * Contiene información sobre el resultado del servicio.
+ */
 @AllArgsConstructor
 @Builder
 @Setter
@@ -16,16 +20,25 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ServicesResponse {
 
-    @JsonProperty("id")
-    public String id;
-    @JsonProperty("resultWeather")
-    public WeatherDtoResponse resultWeather;
-    @JsonProperty("error")
-    public Object error;
+  @JsonProperty("id")
+  public String id;
+  @JsonProperty("resultWeather")
+  public WeatherDtoResponse resultWeather;
+  @JsonProperty("slot")
+  public int slot;
+  @JsonProperty("error")
+  public Object error;
 
-    public ServicesResponse errorResponse(String id, String errorMessage) {
-        this.id = id;
-        this.error = errorMessage;
-        return this;
-    }
+  /**
+   * Metodo de conveniencia para crear una respuesta de error.
+   *
+   * @param id Identificador del servicio que causó el error.
+   * @param errorMessage Mensaje de error descriptivo.
+   * @return Instancia de ServicesResponse con el error configurado.
+   */
+  public ServicesResponse errorResponse(String id, String errorMessage) {
+    this.id = id;
+    this.error = errorMessage;
+    return this;
+  }
 }
