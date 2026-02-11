@@ -1,10 +1,10 @@
 services:
-  weather-service:
+  app-ibk-weather-v1:
     image: eclipse-temurin:17-jdk
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: weather-service
+    container_name: app-ibk-weather-v1
     ports:
       - "8080:8080"
     environment:
@@ -18,4 +18,4 @@ services:
     volumes:
       - ./data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    command: ["redis-server", "--requirepass", "123456789"]

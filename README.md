@@ -90,3 +90,34 @@ parent.
 To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
 
+### How to run the application
+To run the application, you can use the following command:
+
+```
+$ ./mvnw spring-boot:run
+```
+
+Docker: 
+To run the application using Docker, you can use the following command:
+
+```
+$ docker build -t app-ibk-library-v1:0.0.1-SNAPSHOT .
+$ docker run --rm app-ibk-library-v1:0.0.1-SNAPSHOT
+```
+
+if you have Docker Compose set up, you can use the following command to start the application:
+
+```
+$ docker-compose -f compose.yaml up
+```
+
+If you have to configurate the kubernetes cluster, you can use the following command to deploy the application:
+
+```
+$ kubectl apply -f deployment.yaml
+$ kubectl apply -f service.yaml
+$ kubectl apply -f hpa.yaml
+$ docker run -d -p 8080:8080 --name app-ibk-weather-v1 app-ibk-weather-v1:1.0 
+```
+
+** Edit the version and the name of the image as needed.

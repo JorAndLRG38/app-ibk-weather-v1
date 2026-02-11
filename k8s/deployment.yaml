@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-ibk-weather-v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-ibk-weather-v1
+  template:
+    metadata:
+      labels:
+        app: app-ibk-weather-v1
+    spec:
+      containers:
+        - name: app-ibk-weather-v1
+          image: app-ibk-weather-v1:1.0.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_REDIS_HOST
+              value: redis
+            - name: SPRING_REDIS_PORT
+              value: "6379"
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
