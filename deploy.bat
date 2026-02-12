@@ -10,23 +10,30 @@ set K8S_DIR=%~dp0k8s
 
 echo 🚀 Iniciando despliegue automatico...
 
+echo 📦 Empaquetando proyecto
+mvn clean package -DskipTests
+
 REM 1. Eliminar recursos previos en Kubernetes
 echo 🧹 Eliminando recursos previos en Kubernetes...
-kubectl delete -f %K8S_DIR% --ignore-not-found=true
+REM kubectl delete -f %K8S_DIR% --ignore-not-found=true
 
 REM 2. Aplicar nuevamente los manifiestos
 echo 📦 Aplicando manifiestos de Kubernetes...
-kubectl apply -f %K8S_DIR%
+REM kubectl apply -f %K8S_DIR%
 
 REM 3. Borrar contenedores locales de Docker
 echo 🧹 Eliminando contenedores locales de Docker...
 for /f %%i in ('docker ps -aq --filter "name=app-ibk-weather-v1:1.0"') do docker rm -f %%i
 for /f %%i in ('docker ps -aq --filter "name=app-ibk-weather-v1:1.0.0"') do docker rm -f %%i
 for /f %%i in ('docker ps -aq --filter "name=app-ibk-weather-v1:1.0.1"') do docker rm -f %%i
+docker rm -f app-ibk-weather-v1
 
 REM 4. Reconstruir la imagen Docker
 echo 🔨 Construyendo imagen Docker...
 docker build -t %IMAGE_NAME%:%IMAGE_TAG% .
+docker-compose down
+docker-compose build --no-cache
+docker-compose up
 
 REM 5. (Opcional) Borrar imagenes locales para forzar rebuild
 REM ⚠️ Ten cuidado: esto borra todas las imagenes locales
@@ -34,7 +41,7 @@ REM for /f %%i in ('docker images -q') do docker rmi -f %%i
 
 REM 5. Confirmar estado de pods
 echo 🔍 Verificando estado de pods...
-kubectl get pods
+REM kubectl get pods
 
 echo ✅ Script finalizado. Tus recursos estan desplegados nuevamente.
 

@@ -1,12 +1,11 @@
 package com.ibk.weather.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Clase que mapea códigos de error HTTP a mensajes personalizados.
@@ -40,22 +39,22 @@ public class ErrorMapper {
    */
   public String getMessageFromString(String input, String city) {
     if (input == null || input.trim().isEmpty()) {
-      return "C\u00F3digo no disponible.";
+      return "Código no disponible.";
     }
     log.error("Error recibido: '{}'", input.trim());
     Matcher m = CODE_PATTERN.matcher(input.trim());
     if (!m.find()) {
-      log.error("No se encontr\u00F3 un c\u00F3digo de error en la cadena: '{}'", input.trim());
+      log.error("No se encontró un código de error en la cadena: '{}'", input.trim());
       return "Código " + input + " no encontrado en la cadena.";
     }
     try {
       int code = Integer.parseInt(m.group(1));
-      log.error("Error de c\u00F3digo: " +  code);
+      log.error("Error de código: " +  code);
       return messages.getOrDefault(
-          code, "Error HTTP " + code + ". Consulte la documentaci\u00F3n del API.")
+          code, "Error HTTP " + code + ". Consulte la documentación del API.")
           .replace("%c", city);
     } catch (NumberFormatException e) {
-      return "C\u00F3digo inv\u00E1lido: " + e.getMessage();
+      return "Código inválido: " + e.getMessage();
     }
   }
 }

@@ -1,8 +1,6 @@
 package com.ibk.weather.utils;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 /**
  * Utilidades para manejar horas y slots de tiempo.

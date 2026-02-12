@@ -2,19 +2,18 @@ package com.ibk.weather.services.impl;
 
 import com.ibk.weather.models.CurrentWeatherResponse;
 import java.time.Duration;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisOperations;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
 /**
  * Servicio para interactuar con Redis de manera reactiva.
  * Permite guardar y obtener datos de clima actual en Redis con una expiración de 1 hora.
  */
-@Component
+@Repository
 public class RedisServiceImpl {
 
   private final ReactiveRedisConnectionFactory factory;
@@ -41,7 +40,9 @@ public class RedisServiceImpl {
    */
   public void saveData(CurrentWeatherResponse response) {
     weatherOps.opsForValue()
-        .setIfAbsent(response.getName(), response, Duration.ofHours(1L));
+        .setIfAbsent(this.capitalize(response.getName()),
+            response, Duration.ofMinutes(1L))
+        .subscribe();
   }
 
   /**
@@ -52,10 +53,19 @@ public class RedisServiceImpl {
    */
   public Mono<CurrentWeatherResponse> getData(String name) {
     log.info("Buscando datos en cache con codigo {}.", name);
-    return weatherOps.opsForValue()
-        .get(name)
-        .doOnSuccess(success ->
-            log.info("Datos obtenidos de cache para codigo {}.", name))
-        .doOnError(ex -> log.error("Error al obtener datos: {}", ex.getMessage()));
+    return weatherOps.opsForValue().get(this.capitalize(name));
+  }
+
+  /**
+   * Metodo para estandarizar el formato del id.
+   *
+   * @param input Nombre de la ciudad.
+   * @return String formateado.
+   */
+  private String capitalize(String input) {
+    if (input == null || input.isEmpty()) {
+      return input;
+    }
+    return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
   }
 }

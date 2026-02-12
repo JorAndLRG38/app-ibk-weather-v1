@@ -41,7 +41,8 @@ public class OpenWeatherServiceImpl implements OpenWeatherService {
       String city, ServerWebExchange exchange) {
     log.info("Obteniendo clima actual para la ciudad: {}", city);
     return this.getDataFromCacheOrApi(city)
-        .map(json -> ResponseEntity.ok(this.buildResponse(json)))
+        .map(json ->
+            ResponseEntity.ok(new ResponseMapper().mapToServicesResponse(json)))
         .onErrorResume(ex ->
             Mono.just(ResponseEntity
                 .status(500).body(new ServicesResponse().errorResponse(
@@ -51,19 +52,14 @@ public class OpenWeatherServiceImpl implements OpenWeatherService {
   private Mono<CurrentWeatherResponse> getDataFromCacheOrApi(String city) {
     log.info("Iniciando busqueda.");
     return redisService.getData(city)
+      .map(apiResponse -> apiResponse)
       .switchIfEmpty(
         weatherClient.getCurrentWeather(city)
           .map(apiResponse -> {
-            log.info("Datos obtenidos, procediendo con el guardado en cache");
+            log.info("Datos obtenidos del API, procediendo con el guardado en cache");
             redisService.saveData(apiResponse);
             return apiResponse;
           })
       );
-  }
-
-  private ServicesResponse buildResponse(CurrentWeatherResponse obj) {
-    ServicesResponse response = new ResponseMapper().mapToServicesResponse(obj);
-    redisService.saveData(obj);
-    return response;
   }
 }

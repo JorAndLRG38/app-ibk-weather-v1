@@ -1,21 +1,36 @@
 services:
   app-ibk-weather-v1:
-    image: eclipse-temurin:17-jdk
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
+    image: app-ibk-weather-v1:latest
     container_name: app-ibk-weather-v1
     ports:
-      - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - OPENWEATHER_API_KEY=524a1799445ad793e2b9e95c09eeb810
+      - "8081:8080"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
   redis:
     image: redis:7
-    container_name: redis-local
+    container_name: redis
     ports:
       - "6379:6379"
     volumes:
       - ./data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
     command: ["redis-server", "--requirepass", "123456789"]
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "123456789", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge

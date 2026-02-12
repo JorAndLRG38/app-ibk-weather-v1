@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class OpenWeatherClient {
 
-  private OpenWeatherConfig config;
+  private final OpenWeatherConfig config;
   private final WebClient webClient;
   private final Logger log = LoggerFactory.getLogger(OpenWeatherClient.class);
 
@@ -44,6 +44,7 @@ public class OpenWeatherClient {
             .queryParam("units", "metric")
             .build())
         .retrieve()
-        .bodyToMono(CurrentWeatherResponse.class);
+        .bodyToMono(CurrentWeatherResponse.class)
+        .doOnSuccess(response -> log.info("OpenWeather API response for {}", response.getName()));
   }
 }

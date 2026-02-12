@@ -13,4 +13,4 @@ EXPOSE 8080
 # Instalar redis-tools (incluye redis-cli)
 RUN apt-get update && apt-get install -y redis-tools && rm -rf /var/lib/apt/lists/*
 # Comando de arranque
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Dspring.output.ansi.enabled=ALWAYS", "-Dlogging.level.root=INFO", "-jar", "app.jar"]

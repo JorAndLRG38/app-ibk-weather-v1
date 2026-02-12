@@ -19,11 +19,5 @@ spec:
           ports:
             - containerPort: 8080
           env:
-            - name: SPRING_DATA_REDIS_HOST
-              value: redis
-            - name: SPRING_DATA_REDIS_PORT
-              value: "6379"
-            - name: SPRING_DATA_REDIS_PASSWORD
-              value: "123456789"
             - name: SPRING_PROFILES_ACTIVE
-              value: k8s
+              value: default

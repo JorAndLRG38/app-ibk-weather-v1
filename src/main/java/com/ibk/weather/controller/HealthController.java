@@ -4,6 +4,7 @@ import com.ibk.weather.models.responses.HealthDtoResponse;
 import com.ibk.weather.services.HealthService;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import reactor.core.publisher.Mono;
 public class HealthController {
 
   private final HealthService service;
+  private final ReactiveRedisTemplate reactiveRedisTemplate;
 
   /**
    * GET /api/health : Verificar estado del microservicio
@@ -31,5 +33,17 @@ public class HealthController {
   public Mono<ResponseEntity<HealthDtoResponse>> getHealth(
       @Parameter(hidden = true) final ServerWebExchange exchange) {
     return service.checkHealth(exchange);
+  }
+
+  /**
+   * Test endpoint for redis connection.
+   *
+   * @return String
+   */
+  @GetMapping("/test")
+  public Mono<String> test() {
+    return reactiveRedisTemplate.opsForValue()
+        .set("key", "value")
+        .thenReturn("OK");
   }
 }
