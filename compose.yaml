@@ -4,7 +4,7 @@ services:
     image: app-ibk-weather-v1:latest
     container_name: app-ibk-weather-v1
     ports:
-      - "8081:8080"
+      - "8080"
     depends_on:
       redis:
         condition: service_healthy

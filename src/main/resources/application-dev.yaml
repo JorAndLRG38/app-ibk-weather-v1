@@ -1,9 +1,9 @@
 spring:
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
-      password: 123456789
+      password: ${SPRING_REDIS_PASSWORD}
       timeout: 60000
       lettuce:
         pool:
@@ -16,8 +16,6 @@ spring:
     property-naming-strategy: SNAKE_CASE
 server:
   port: 8080
-  tomcat:
-    max-threads: 200
 logging:
   level:
     org.springframework.data.redis: DEBUG
@@ -37,5 +35,5 @@ management:
       access: unrestricted
 openweather:
   base-url: https://api.openweathermap.org/data/2.5
-  api-key: 524a1799445ad793e2b9e95c09eeb810
+  api-key:  ${OPENWEATHER_API_KEY}
   timeout-ms: 5000

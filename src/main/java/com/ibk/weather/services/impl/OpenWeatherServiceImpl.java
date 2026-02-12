@@ -2,6 +2,7 @@ package com.ibk.weather.services.impl;
 
 import com.ibk.weather.clients.OpenWeatherClient;
 import com.ibk.weather.mapper.ResponseMapper;
+import com.ibk.weather.metrics.WeatherMetrics;
 import com.ibk.weather.models.CurrentWeatherResponse;
 import com.ibk.weather.models.responses.ServicesResponse;
 import com.ibk.weather.services.OpenWeatherService;
@@ -20,6 +21,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class OpenWeatherServiceImpl implements OpenWeatherService {
 
+  private WeatherMetrics metrics;
   private final RedisServiceImpl redisService;
   private final OpenWeatherClient weatherClient;
   private final Logger log = LoggerFactory.getLogger(OpenWeatherServiceImpl.class);
@@ -41,12 +43,15 @@ public class OpenWeatherServiceImpl implements OpenWeatherService {
       String city, ServerWebExchange exchange) {
     log.info("Obteniendo clima actual para la ciudad: {}", city);
     return this.getDataFromCacheOrApi(city)
-        .map(json ->
-            ResponseEntity.ok(new ResponseMapper().mapToServicesResponse(json)))
-        .onErrorResume(ex ->
-            Mono.just(ResponseEntity
+        .map(json -> {
+          metrics.recordSuccess();
+          return ResponseEntity.ok(new ResponseMapper().mapToServicesResponse(json));})
+        .onErrorResume(ex -> {
+            metrics.recordError();
+            return Mono.just(ResponseEntity
                 .status(500).body(new ServicesResponse().errorResponse(
-                    city, new ErrorMapper().getMessageFromString(ex.getMessage(), city)))));
+                    city, new ErrorMapper().getMessageFromString(ex.getMessage(), city))));
+        });
   }
 
   private Mono<CurrentWeatherResponse> getDataFromCacheOrApi(String city) {
